@@ -20,13 +20,6 @@ NB-IoT). Cada byte a mais que ele transmite é bateria que vai embora e rede
 que congestiona. E ele não manda uma leitura grande de vez em quando: manda um
 punhado de bytes, o tempo todo.
 
-O HTTP foi pensado para a web, não para isso. Ele abre conexão TCP com
-handshake, empilha cabeçalhos de texto longos e gasta dezenas de bytes só para
-entregar uma leitura de 70 bytes. No laboratório, na fibra de casa, ninguém
-sente. No campo, com mil sensores e bateria contada, esse desperdício vira
-custo real: troca de bateria mais cedo, rede saturada, dispositivo que precisa
-ser mais caro só para dar conta.
-
 O CoAP foi feito justamente para esse aperto. Roda sobre UDP, dispensa
 handshake e o cabeçalho cabe em poucos bytes. No nosso teste, a mesma leitura
 sai com cerca de 14 bytes de overhead contra 136 do HTTP, quase 60% mais leve
