@@ -1,4 +1,4 @@
-# Redes de Computadores — Trabalho II
+# Redes de Computadores
 ## CoAP para IoT
 
 Aplicação que **simula sensores IoT** enviando leituras de temperatura e
