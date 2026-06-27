@@ -1,5 +1,5 @@
 # Redes de Computadores — Trabalho II
-## Grupo 8 — HTTP vs CoAP para IoT
+## HTTP vs CoAP para IoT
 
 Aplicação que **simula sensores IoT** enviando leituras de temperatura e
 umidade por **dois protocolos diferentes** — HTTP e CoAP — para comparar
@@ -7,34 +7,44 @@ funcionamento, formato das mensagens e leveza de cada um.
 
 ---
 
-## Qual protocolo é melhor para os nossos sensores?
+## Na vida real, qual protocolo escolher para esses sensores?
 
-Para os sensores deste trabalho, o CoAP leva vantagem. A razão é direta:
-nossos sensores mandam pacotes pequenos de temperatura e umidade, várias vezes
-por minuto, e normalmente rodam em hardware fraco, com pouca bateria e rede
-instável.
+Tira o trabalho da equação por um segundo e imagina esses sensores instalados
+de verdade: dezenas deles num galpão, numa lavoura ou numa fábrica, medindo
+temperatura e umidade o dia inteiro. Nesse cenário, o CoAP é a escolha que
+faz sentido.
 
-O HTTP foi feito pensando em páginas e APIs na web. Ele abre uma conexão TCP
-(com handshake), carrega cabeçalhos de texto longos e gasta vários bytes só
-para entregar uma leitura de 70 bytes. Funciona, mas é desperdício quando o
-dado é minúsculo e o envio é constante.
+Na prática, sensor de campo costuma ser um chip barato, alimentado por
+bateria ou painel solar, falando por uma rede sem fio fraquinha (LoRa, Zigbee,
+NB-IoT). Cada byte a mais que ele transmite é bateria que vai embora e rede
+que congestiona. E ele não manda uma leitura grande de vez em quando: manda um
+punhado de bytes, o tempo todo.
 
-O CoAP nasceu para esse cenário. Roda sobre UDP, dispensa handshake e o
-cabeçalho cabe em poucos bytes. No nosso teste, a mesma leitura sai com cerca
-de 14 bytes de overhead contra 136 do HTTP, quase 60% mais leve no total. Para
-um sensor que envia o dia inteiro, isso vira menos bateria gasta, menos rede
-ocupada e mais folga para hardware barato.
+O HTTP foi pensado para a web, não para isso. Ele abre conexão TCP com
+handshake, empilha cabeçalhos de texto longos e gasta dezenas de bytes só para
+entregar uma leitura de 70 bytes. No laboratório, na fibra de casa, ninguém
+sente. No campo, com mil sensores e bateria contada, esse desperdício vira
+custo real: troca de bateria mais cedo, rede saturada, dispositivo que precisa
+ser mais caro só para dar conta.
+
+O CoAP foi feito justamente para esse aperto. Roda sobre UDP, dispensa
+handshake e o cabeçalho cabe em poucos bytes. No nosso teste, a mesma leitura
+sai com cerca de 14 bytes de overhead contra 136 do HTTP, quase 60% mais leve
+no total. Multiplica isso por milhares de envios por dia e por centenas de
+sensores: é a diferença entre uma bateria durar meses ou anos.
 
 Tem um porém honesto: UDP não garante entrega. Se um pacote se perde, o CoAP
 não reenvia sozinho como o TCP faria (ele tem mensagens confirmáveis, mas isso
-é outra conversa). Para leitura de sensor isso costuma ser aceitável, já que
-perder uma medida no meio de centenas não muda nada. O HTTP continua sendo a
-melhor escolha quando você precisa de garantia de entrega, integração fácil
-com a web ou quando o dispositivo não é tão limitado.
+é outra conversa). Para leitura de sensor isso quase sempre é aceitável, já que
+perder uma medida no meio de centenas não muda nada. Quando você de fato
+precisa de garantia de entrega, integração fácil com a web ou quando o
+dispositivo é parrudo e tem energia de sobra, aí o HTTP volta a ser a escolha
+certa.
 
-Resumindo: para os sensores IoT deste projeto, fica o CoAP. Mais leve, sem
-handshake e feito para dispositivo restrito. O HTTP entra quando confiabilidade
-e compatibilidade com a web pesam mais do que economia de bytes.
+Resumindo, na vida real: para sensor IoT pequeno, com bateria e rede limitadas,
+fica o CoAP. Mais leve, sem handshake, feito para o dispositivo restrito. O
+HTTP entra quando confiabilidade e compatibilidade com a web pesam mais do que
+economia de bytes.
 
 ---
 
