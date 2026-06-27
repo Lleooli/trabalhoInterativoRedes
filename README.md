@@ -1,9 +1,11 @@
 # Redes de Computadores — Trabalho II
-## HTTP vs CoAP para IoT
+## CoAP para IoT
 
 Aplicação que **simula sensores IoT** enviando leituras de temperatura e
-umidade por **dois protocolos diferentes** — HTTP e CoAP — para comparar
-funcionamento, formato das mensagens e leveza de cada um.
+umidade para mostrar, na prática, por que o **CoAP** é o protocolo certo para
+dispositivos restritos. Como referência, as mesmas leituras também vão por
+HTTP, e o projeto compara o overhead, o formato das mensagens e a leveza de
+cada um.
 
 ---
 
