@@ -5,6 +5,36 @@ Aplicação que **simula sensores IoT** enviando leituras de temperatura e
 umidade por **dois protocolos diferentes** — HTTP e CoAP — para comparar
 funcionamento, formato das mensagens e leveza de cada um.
 
+---
+
+## Qual protocolo é melhor para os nossos sensores?
+
+Para os sensores deste trabalho, o CoAP leva vantagem. A razão é direta:
+nossos sensores mandam pacotes pequenos de temperatura e umidade, várias vezes
+por minuto, e normalmente rodam em hardware fraco, com pouca bateria e rede
+instável.
+
+O HTTP foi feito pensando em páginas e APIs na web. Ele abre uma conexão TCP
+(com handshake), carrega cabeçalhos de texto longos e gasta vários bytes só
+para entregar uma leitura de 70 bytes. Funciona, mas é desperdício quando o
+dado é minúsculo e o envio é constante.
+
+O CoAP nasceu para esse cenário. Roda sobre UDP, dispensa handshake e o
+cabeçalho cabe em poucos bytes. No nosso teste, a mesma leitura sai com cerca
+de 14 bytes de overhead contra 136 do HTTP, quase 60% mais leve no total. Para
+um sensor que envia o dia inteiro, isso vira menos bateria gasta, menos rede
+ocupada e mais folga para hardware barato.
+
+Tem um porém honesto: UDP não garante entrega. Se um pacote se perde, o CoAP
+não reenvia sozinho como o TCP faria (ele tem mensagens confirmáveis, mas isso
+é outra conversa). Para leitura de sensor isso costuma ser aceitável, já que
+perder uma medida no meio de centenas não muda nada. O HTTP continua sendo a
+melhor escolha quando você precisa de garantia de entrega, integração fácil
+com a web ou quando o dispositivo não é tão limitado.
+
+Resumindo: para os sensores IoT deste projeto, fica o CoAP. Mais leve, sem
+handshake e feito para dispositivo restrito. O HTTP entra quando confiabilidade
+e compatibilidade com a web pesam mais do que economia de bytes.
 
 ---
 
